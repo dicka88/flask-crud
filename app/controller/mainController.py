@@ -1,5 +1,5 @@
 from app.model.user import Users
-from app import response, app
+from app.config import response
 
 def index():
     try:
