@@ -6,8 +6,9 @@ def index():
         users = Users.query.all()
         data = transform(users)
 
-        return response.ok(data, "")
+        return response.ok(data, "success")
     except Exception as e:
+        return response.badRequest(null, 'failed')
         print(e)
 
 def transform(obj):
