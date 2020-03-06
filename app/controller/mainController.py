@@ -1,6 +1,10 @@
 from app.model.user import Users
 from app.config import response
+
+from flask_sqlalchemy import SQLAlchemy
 from flask import request
+from flask import Flask
+from app import db
 
 def index():
     try:
@@ -37,10 +41,9 @@ def _singleTransform(obj):
 
 def store():
     try:
-        print(request)
-        name = request.json['name']
-        email = request.json['email']
-        password = request.json['password']
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
 
         users = Users(name=name, email=email)
         users.setPassword(password)
@@ -51,5 +54,20 @@ def store():
 
     except Exception as e:
         print(e)
-        print("Ini error")
-        return response.ok([], 'Successfully create data')
+        return response.ok([], 'Failed, user is exist')
+
+def update(id):
+    try:
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+
+        user = Users.query.filter_by(id=id).first()
+        user.email = email
+        user.name = name
+        user.setPassword(password)
+
+        db.session.commit()
+
+        return response.ok('', 'Successfully update data!')
+    except Exception as e:
