@@ -71,3 +71,17 @@ def update(id):
 
         return response.ok('', 'Successfully update data!')
     except Exception as e:
+        print(e)
+
+def delete(id):
+    try:
+        user = Users.query.filter_by(id=id).first()
+        if not user:
+            return response.badRequest([], 'Users didn\' found')
+        
+        db.session.delete(user)
+        db.session.commit()
+
+        return response.ok([], 'Successfully delete')
+    except Exception as e:
+        print(e)
