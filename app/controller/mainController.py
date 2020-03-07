@@ -85,3 +85,23 @@ def delete(id):
         return response.ok([], 'Successfully delete')
     except Exception as e:
         print(e)
+
+def login():
+    try:
+        email = request.form['email']
+        password = request.form['password']
+
+        user = Users.query.filter_by(email=email).first()
+
+        if not user:
+            return response.badRequest([], 'Empty...')
+        
+        if not user.checkPassword(password):
+            return response.badRequest([], 'Password is wrong')
+        
+        data = _singleTransform(user)
+        return response.ok(data, 'Success signin')
+
+    except Exception as e:
+        print(e)
+        return response.badRequest([], 'Params is failed')

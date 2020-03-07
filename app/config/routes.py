@@ -25,4 +25,23 @@ def users():
         return mainController.index()
     else:
         return mainController.store()
+    
+@app.route('/login', methods=['POST'])
+def login():
+    return mainController.login()
 
+@app.route('/todo', methods=['POST', 'GET'])
+def todo():
+    if request.method == 'GET':
+        return TodoController.index()
+    else:
+        return TodoController.store()
+
+@app.route('/todo/<id>', methods=['PUT', 'GET', 'DELETE'])
+def todoDetail(id):
+    if request.method == 'GET':
+        return TodoController.show(id)
+    elif request.method == 'PUT':
+        return TodoController.update(id)
+    elif request.method == 'DELETE':
+        return TodoController.delete(id)
