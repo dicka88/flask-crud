@@ -1,6 +1,7 @@
 from app.model.user import Users
 from app.config import response
-from pprint import pprint
+from datetime import timedelta
+from flask_jwt_extended import *
 
 from flask_sqlalchemy import SQLAlchemy
 from flask import request
@@ -112,9 +113,34 @@ def login():
         if not user.checkPassword(password):
             return response.badRequest([], 'Password is wrong')
         
-        data = _singleTransform(user)
-        return response.ok(data, 'Success signin')
+        data = _singleTransform(user, withTodo=False)
+
+        # jwt config
+        expires = timedelta(days=1)
+        expires_refresh = timedelta(days=3)
+        access_token = create_access_token(data, fresh=True, expires_delta=expires)
+        refresh_token = create_refresh_token(data, expires_delta=expires_refresh)
+        # jwt 
+
+        return response.ok({
+            "data": data,
+            "token_access": access_token,
+            "token_refresh": refresh_token
+        }, 'Success signin')
 
     except Exception as e:
         print(e)
         return response.badRequest([], 'Params is failed')
+
+@jwt_refresh_token_required
+def refresh():
+    try:
+        user = get_jwt_identity()
+        new_token = create_access_token(identity=user, fresh=False)
+
+        return response.ok({
+            "token_access": new_token
+        }, "successfully refresh token")
+    except Exception as e:
+        print(e)
+        return response.badRequest([], 'Failed refresh token')

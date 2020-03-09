@@ -46,3 +46,7 @@ def todoDetail(id):
         return todoController.update(id)
     elif request.method == 'DELETE':
         return todoController.delete(id)
+
+@app.route('/refresh', methods=['POST'])
+def refresh():
+    return mainController.refresh()

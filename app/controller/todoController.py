@@ -4,7 +4,10 @@ from app import db
 from app.config import response
 from app.controller import mainController
 
+from flask_jwt_extended import *
+
 # Routing your world
+@jwt_required
 def index():
     try:
         id = request.args.get('user_id')
