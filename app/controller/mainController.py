@@ -1,5 +1,6 @@
 from app.model.user import Users
 from app.config import response
+from pprint import pprint
 
 from flask_sqlalchemy import SQLAlchemy
 from flask import request
@@ -32,12 +33,24 @@ def _transform(obj):
         array.append(_singleTransform(i))
     return array
 
-def _singleTransform(obj):
-    return {
+def _singleTransform(obj, withTodo=True):
+    data = {
         'id': obj.id,
         'name': obj.name,
-        'email': obj.email
+        'email': obj.email,
     }
+
+    if withTodo:
+        todos = []
+        for i in obj.todos:
+            todos.append({
+                'id': i.id,
+                'todo': i.todo,
+                'description': i.description
+            })
+        data['todos'] = todos
+
+    return data
 
 def store():
     try:

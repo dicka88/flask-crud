@@ -13,4 +13,4 @@ seeder = FlaskSeeder()
 seeder.init_app(app, db)
 
 from app.config import routes
-from app.model import todo, user
+from app.model import user

@@ -1,10 +1,10 @@
-from app.model.todo import Todos as Todo
+from app.model.user import Todos as Todo
 from flask import request, jsonify
 from app import db
 from app.config import response
-from app.controller import UserController
+from app.controller import mainController
 
-
+# Routing your world
 def index():
     try:
         id = request.args.get('user_id')
@@ -13,7 +13,6 @@ def index():
         return response.ok(data, "")
     except Exception as e:
         print(e)
-
 
 def store():
     try:
@@ -29,7 +28,6 @@ def store():
 
     except Exception as e:
         print(e)
-
 
 def update(id):
     try:
@@ -47,7 +45,6 @@ def update(id):
     except Exception as e:
         print(e)
 
-
 def show(id):
     try:
         todo = Todo.query.filter_by(id=id).first()
@@ -58,7 +55,6 @@ def show(id):
         return response.ok(data, "")
     except Exception as e:
         print(e)
-
 
 def delete(id):
     try:
@@ -73,13 +69,11 @@ def delete(id):
     except Exception as e:
         print(e)
 
-
 def transform(values):
     array = []
     for i in values:
         array.append(singleTransform(i))
     return array
-
 
 def singleTransform(values):
     data = {
@@ -89,7 +83,8 @@ def singleTransform(values):
         'description': values.description,
         'created_at': values.created_at,
         'updated_at': values.updated_at,
-        'user': UserController.singleTransform(values.users, withTodo=False)
+        'users': mainController._singleTransform(values.users, withTodo=False)
     }
+
 
     return data

@@ -1,5 +1,6 @@
 from app import app
 from app.controller import mainController
+from app.controller import todoController
 from flask import request
 
 @app.route('/')
@@ -33,15 +34,15 @@ def login():
 @app.route('/todo', methods=['POST', 'GET'])
 def todo():
     if request.method == 'GET':
-        return TodoController.index()
+        return todoController.index()
     else:
-        return TodoController.store()
+        return todoController.store()
 
 @app.route('/todo/<id>', methods=['PUT', 'GET', 'DELETE'])
 def todoDetail(id):
     if request.method == 'GET':
-        return TodoController.show(id)
+        return todoController.show(id)
     elif request.method == 'PUT':
-        return TodoController.update(id)
+        return todoController.update(id)
     elif request.method == 'DELETE':
-        return TodoController.delete(id)
+        return todoController.delete(id)
